@@ -3,12 +3,24 @@ import { Post } from '../models/Post';
 import { authMiddleware } from '../middleware/auth';
 import { validateDto } from '../utils/validateDto';
 import { PostDto } from '../dto/PostDto';
+import { UserDocument } from '../models/User';
 
 const router = new Router();
 
 // Отримати всі пости
 router.get('/', async ctx => {
-    ctx.body = await Post.find();
+    const posts = await Post.find().populate('author', 'username').sort({ createdAt: -1 });
+
+    ctx.body = posts.map(post => ({
+        id: post._id,
+        title: post.title,
+        text: post.text,
+        image: post.image,
+        latitude: post.latitude,
+        longitude: post.longitude,
+        author: (post.author as UserDocument)?.username || 'Невідомо',
+        createdAt: post.createdAt,
+    }));
 });
 
 // Створити пост (авторизовано)

@@ -5,6 +5,7 @@ import { User } from '../models/User';
 import { RegisterDto } from '../dto/RegisterDto';
 import { LoginDto } from '../dto/LoginDto';
 import { validateDto } from '../utils/validateDto';
+
 import dotenv from 'dotenv';
 dotenv.config();
 

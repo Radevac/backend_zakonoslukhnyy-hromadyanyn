@@ -1,13 +1,24 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
+import { UserDocument } from './User';
 
-// Схема поста
-const postSchema = new mongoose.Schema({
+export interface PostDocument extends Document {
+    title: string;
+    text: string;
+    author: Types.ObjectId | UserDocument;
+    image: string;
+    latitude?: number;
+    longitude?: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const postSchema = new mongoose.Schema<PostDocument>({
     title: String,
     text: String,
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     image: { type: String, required: true },
-    latitude: { type: Number },
-    longitude: { type: Number },
-});
+    latitude: Number,
+    longitude: Number
+}, { timestamps: true });
 
-export const Post = mongoose.model('Post', postSchema);
+export const Post = mongoose.model<PostDocument>('Post', postSchema);
