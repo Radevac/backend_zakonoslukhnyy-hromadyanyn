@@ -41,4 +41,19 @@ router.post('/', authMiddleware, validateDto(PostDto), async ctx => {
     ctx.body = { message: 'Пост створено' };
 });
 
+// Видалити пост (авторизовано)
+router.delete('/:id', authMiddleware, async ctx => {
+    const { id } = ctx.params;
+
+    const deleted = await Post.findByIdAndDelete(id);
+
+    if (!deleted) {
+        ctx.status = 404;
+        ctx.body = { message: 'Пост не знайдено' };
+        return;
+    }
+
+    ctx.body = { message: 'Пост видалено' };
+});
+
 export default router;
